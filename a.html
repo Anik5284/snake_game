@@ -25,22 +25,22 @@
 <body>
 
 <h1>🐍 Snake Game</h1>
-<canvas id="gameCanvas" width="400" height="400"></canvas>
+<canvas id="gameCanvas" width="800" height="800"></canvas>
 <p>Use arrow keys to move</p>
 
 <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
-    const box = 20;
-    let snake = [{ x: 9 * box, y: 9 * box }];
+    const box = 20; // Each cell is 20x20
+    let snake = [{ x: 20 * box, y: 20 * box }];
     let direction;
     let food = {
-        x: Math.floor(Math.random() * 20) * box,
-        y: Math.floor(Math.random() * 20) * box
+        x: Math.floor(Math.random() * (canvas.width / box)) * box,
+        y: Math.floor(Math.random() * (canvas.height / box)) * box
     };
     let score = 0;
-    let speed = 150; // Starting speed in ms
+    let speed = 150;
     let game;
 
     document.addEventListener("keydown", setDirection);
@@ -76,16 +76,16 @@
         if (direction === "RIGHT") snakeX += box;
         if (direction === "DOWN") snakeY += box;
 
-        // If snake eats food
+        // Eat food
         if (snakeX === food.x && snakeY === food.y) {
             score++;
             increaseSpeed();
             food = {
-                x: Math.floor(Math.random() * 20) * box,
-                y: Math.floor(Math.random() * 20) * box
+                x: Math.floor(Math.random() * (canvas.width / box)) * box,
+                y: Math.floor(Math.random() * (canvas.height / box)) * box
             };
         } else {
-            snake.pop(); // Remove tail
+            snake.pop();
         }
 
         const newHead = { x: snakeX, y: snakeY };
@@ -115,7 +115,7 @@
 
     function increaseSpeed() {
         clearInterval(game);
-        speed = Math.max(50, speed - 5); // speed increases each time, min 50ms
+        speed = Math.max(50, speed - 5);
         game = setInterval(drawGame, speed);
     }
 
