@@ -40,6 +40,8 @@
         y: Math.floor(Math.random() * 20) * box
     };
     let score = 0;
+    let speed = 150; // Starting speed in ms
+    let game;
 
     document.addEventListener("keydown", setDirection);
 
@@ -77,6 +79,7 @@
         // If snake eats food
         if (snakeX === food.x && snakeY === food.y) {
             score++;
+            increaseSpeed();
             food = {
                 x: Math.floor(Math.random() * 20) * box,
                 y: Math.floor(Math.random() * 20) * box
@@ -85,10 +88,9 @@
             snake.pop(); // Remove tail
         }
 
-        // Add new head
         const newHead = { x: snakeX, y: snakeY };
 
-        // Game over conditions
+        // Game over
         if (
             snakeX < 0 || snakeX >= canvas.width ||
             snakeY < 0 || snakeY >= canvas.height ||
@@ -96,6 +98,7 @@
         ) {
             clearInterval(game);
             alert("Game Over! Score: " + score);
+            return;
         }
 
         snake.unshift(newHead);
@@ -110,7 +113,17 @@
         return array.some(segment => head.x === segment.x && head.y === segment.y);
     }
 
-    let game = setInterval(drawGame, 100);
+    function increaseSpeed() {
+        clearInterval(game);
+        speed = Math.max(50, speed - 5); // speed increases each time, min 50ms
+        game = setInterval(drawGame, speed);
+    }
+
+    function startGame() {
+        game = setInterval(drawGame, speed);
+    }
+
+    startGame();
 </script>
 
 </body>
